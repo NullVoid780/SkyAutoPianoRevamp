@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// Fetch version information
 	document.getElementById("app-version").textContent = `Version: ${packageJson.version}`;
-	
+
 	/**
 	 * Apply theme to the settings window
 	 * @param {string} theme - 'light' or 'dark' theme name
@@ -82,13 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	navItems.forEach(item => {
 		item.addEventListener('click', (e) => {
 			e.preventDefault();
-			
+
 			// Remove active class from all nav items
 			navItems.forEach(nav => nav.classList.remove('active'));
-			
+
 			// Add active class to clicked item
 			item.classList.add('active');
-			
+
 			// Show corresponding tab
 			const tabId = item.getAttribute('data-tab');
 			showTab(tabId);
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		tabContents.forEach(content => {
 			content.classList.remove('active');
 		});
-		
+
 		// Show the selected tab
 		const targetTab = document.getElementById(tabId);
 		if (targetTab) {
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Update settings
 	document.getElementById("switch-block-update").checked =
 		config.update?.blockUpdate ?? false;
-		
+
 	// Add event listener for block updates switch with confirmation dialog
 	document.getElementById("switch-block-update").addEventListener("change", (event) => {
 		if (event.target.checked) {
@@ -195,13 +195,13 @@ ipcRenderer.on("update-check-response", async (event, data) => {
 	const updateVersion = document.getElementById('update-version');
 	const currentVersion = document.getElementById('current-version');
 	const changelogContent = document.getElementById('changelog-content');
-	
+
 	// Remove any existing classes and clear any existing timeouts
 	messageElement.classList.remove('show', 'success', 'error');
 	if (window.fadeTimeout) {
 		clearTimeout(window.fadeTimeout);
 	}
-	
+
 	if (data.error) {
 		console.log("Update Check: Failed to connect to update server");
 		messageElement.textContent = "Failed to check for updates. Please check your internet connection.";
@@ -215,7 +215,7 @@ ipcRenderer.on("update-check-response", async (event, data) => {
 			// Show update prompt with versions
 			currentVersion.textContent = data.currentVersion;
 			updateVersion.textContent = data.latestVersion;
-			
+
 			// Fetch and display changelog
 			const changelog = await fetchChangelog(data.latestVersion);
 			if (changelog) {
@@ -225,21 +225,21 @@ ipcRenderer.on("update-check-response", async (event, data) => {
 			}
 
 			updatePrompt.classList.add('show');
-			
+
 			// Handle update now button
 			document.getElementById('update-now-btn').addEventListener('click', () => {
 				const updateNowBtn = document.getElementById('update-now-btn');
 				const updateLaterBtn = document.getElementById('update-later-btn');
-				
+
 				// Disable buttons and show loading state
 				updateNowBtn.disabled = true;
 				updateLaterBtn.disabled = true;
 				updateNowBtn.innerHTML = '<svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg> Updating...';
-				
+
 				// Send update request to main process
 				ipcRenderer.send('start-update');
 			});
-			
+
 			// Handle later button
 			document.getElementById('update-later-btn').addEventListener('click', () => {
 				updatePrompt.classList.remove('show');
@@ -261,7 +261,7 @@ ipcRenderer.on('update-status', (event, data) => {
 	const updatePrompt = document.getElementById('update-prompt');
 	const updateNowBtn = document.getElementById('update-now-btn');
 	const updateLaterBtn = document.getElementById('update-later-btn');
-	
+
 	if (data.success) {
 		// Update successful - prompt will be closed by the app restart
 		updatePrompt.classList.remove('show');
@@ -270,12 +270,12 @@ ipcRenderer.on('update-status', (event, data) => {
 		updateNowBtn.disabled = false;
 		updateLaterBtn.disabled = false;
 		updateNowBtn.innerHTML = '<i class="bi bi-download"></i><span>Update Now</span>';
-		
+
 		// Show error message
 		const messageElement = document.getElementById('update-message');
 		messageElement.textContent = data.error || 'Update failed. Please try again later.';
 		messageElement.classList.add('error', 'show');
-		
+
 		// Hide error message after 3 seconds
 		setTimeout(() => {
 			messageElement.classList.remove('show');
@@ -382,12 +382,12 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 
 			let key = data.code; // Use code instead of key to detect numpad keys
-			
+
 			// Map special keys using keyMap
 			if (keyMap[key.toLocaleLowerCase()]) {
 				key = keyMap[key.toLocaleLowerCase()];
 			}
-			
+
 			// Remove 'Key' prefix from regular keys
 			if (key.startsWith("Key")) {
 				key = key.substring(3);
@@ -481,7 +481,7 @@ function showBlockUpdatesDialog(onConfirm, onCancel) {
 	const dialogOverlay = document.createElement('div');
 	dialogOverlay.className = 'block-updates-dialog-overlay';
 	dialogOverlay.id = 'block-updates-dialog';
-	
+
 	// Create dialog content
 	dialogOverlay.innerHTML = `
 		<div class="block-updates-dialog">
@@ -517,21 +517,21 @@ function showBlockUpdatesDialog(onConfirm, onCancel) {
 			</div>
 		</div>
 	`;
-	
+
 	// Add to document
 	document.body.appendChild(dialogOverlay);
-	
+
 	// Add event listeners
 	document.getElementById('block-updates-cancel').addEventListener('click', () => {
 		closeBlockUpdatesDialog();
 		onCancel();
 	});
-	
+
 	document.getElementById('block-updates-confirm').addEventListener('click', () => {
 		closeBlockUpdatesDialog();
 		onConfirm();
 	});
-	
+
 	// Close on overlay click
 	dialogOverlay.addEventListener('click', (e) => {
 		if (e.target === dialogOverlay) {
@@ -539,10 +539,10 @@ function showBlockUpdatesDialog(onConfirm, onCancel) {
 			onCancel();
 		}
 	});
-	
+
 	// Close on Escape key
 	document.addEventListener('keydown', handleEscapeKey);
-	
+
 	// Show dialog with animation
 	setTimeout(() => {
 		dialogOverlay.classList.add('show');
@@ -596,21 +596,21 @@ async function showChangelog(version) {
 			// Update version display
 			currentVersion.textContent = version;
 			updateVersion.style.display = 'none'; // Hide the arrow and new version for post-update display
-			
+
 			// Update title and content
 			const titleElement = updatePrompt.querySelector('h2');
 			titleElement.textContent = 'What\'s New';
-			
+
 			// Display changelog
 			changelogContent.innerHTML = parseChangelog(changelog);
-			
+
 			// Update buttons
 			const buttonsContainer = updatePrompt.querySelector('.update-prompt-buttons');
 			buttonsContainer.innerHTML = '<button id="close-changelog-btn" class="update-btn primary"><i class="bi bi-check-lg"></i><span>Got it!</span></button>';
-			
+
 			// Show the dialog
 			updatePrompt.classList.add('show');
-			
+
 			// Handle close button
 			document.getElementById('close-changelog-btn').addEventListener('click', () => {
 				updatePrompt.classList.remove('show');
@@ -645,3 +645,79 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+// -------------------------------------
+// CLOUD SYNC FUNCTIONALITY
+// -------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+	const btnSync = document.getElementById('btn-sync-now');
+	const statusText = document.getElementById('sync-status-text');
+	const messageEl = document.getElementById('sync-message');
+
+	async function checkSyncStatus() {
+		try {
+			statusText.textContent = "Checking status...";
+			btnSync.disabled = true;
+
+			const result = await ipcRenderer.invoke('sync:status');
+
+			if (result.status === 'ready') {
+				statusText.textContent = "Ready to Sync";
+				statusText.style.color = "#28a745"; // Green
+				btnSync.disabled = false;
+				messageEl.textContent = "";
+			} else if (result.status === 'expired') {
+				statusText.textContent = "Session Expired";
+				statusText.style.color = "#dc3545"; // Red
+				btnSync.disabled = true;
+				messageEl.textContent = result.message;
+				messageEl.className = "update-message error show";
+			} else {
+				statusText.textContent = "Not Connected";
+				statusText.style.color = "#bbbbb";
+				btnSync.disabled = true;
+				messageEl.textContent = result.message;
+				messageEl.className = "update-message error show";
+			}
+		} catch (err) {
+			console.error(err);
+			statusText.textContent = "Error checking status";
+		}
+	}
+
+	const syncTabBtn = document.querySelector('.nav-item[data-tab="sync"]');
+	if (syncTabBtn) {
+		syncTabBtn.addEventListener('click', checkSyncStatus);
+	}
+
+	// Handle Sync Button
+	btnSync.addEventListener('click', async () => {
+		try {
+			btnSync.disabled = true;
+			btnSync.innerHTML = '<svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg> Syncing...';
+
+			const result = await ipcRenderer.invoke('sync:start');
+
+			if (result.success) {
+				messageEl.textContent = `Sync Complete! Downloaded: ${result.downloaded}, Cloud Total: ${result.totalCloud}`;
+				messageEl.className = "update-message success show";
+
+				setTimeout(() => {
+					btnSync.innerHTML = '<i class="bi bi-arrow-repeat"></i><span>Sync Sheets</span>';
+					btnSync.disabled = false;
+					messageEl.classList.remove('show');
+				}, 3000);
+			} else {
+				messageEl.textContent = "Sync Failed: " + result.error;
+				messageEl.className = "update-message error show";
+				btnSync.innerHTML = '<i class="bi bi-arrow-repeat"></i><span>Retry Sync</span>';
+				btnSync.disabled = false;
+			}
+		} catch (err) {
+			btnSync.innerHTML = '<i class="bi bi-arrow-repeat"></i><span>Retry Sync</span>';
+			btnSync.disabled = false;
+			messageEl.textContent = "Error: " + err.message;
+			messageEl.className = "update-message error show";
+		}
+	});
+});

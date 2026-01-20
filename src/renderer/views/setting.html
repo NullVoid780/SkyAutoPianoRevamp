@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Settings</title>
-    
+
     <link rel="stylesheet" href="../assets/styles/global.css">
     <link rel="stylesheet" type="text/css" href="../assets/styles/notie.min.css">
     <link rel="stylesheet" href="../assets/styles/style.css">
@@ -44,7 +44,12 @@
                     <i class="bi bi-arrow-clockwise"></i>
                     <span>Updates</span>
                 </a>
+                <a href="#sync" class="nav-item" data-tab="sync">
+                    <i class="bi bi-cloud-check"></i>
+                    <span>Cloud Sync</span>
+                </a>
             </nav>
+
         </div>
 
         <!-- Main Content Area -->
@@ -266,6 +271,50 @@
 
                     <div class="update-status">
                         <span id="update-message" class="update-message"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cloud Sync Tab -->
+            <div id="sync" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="bi bi-cloud-check"></i> Cloud Sync</h2>
+                    <p>Sync your sheets with SkyPianoHub Cloud (Requires SkyPianoHub Desktop App)</p>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="setting-card">
+                        <div class="setting-info">
+                            <div class="setting-icon">
+                                <i class="bi bi-cloud-check"></i>
+                            </div>
+                            <div class="setting-details">
+                                <h3>Sync Status</h3>
+                                <p id="sync-status-text">Checking status...</p>
+                            </div>
+                        </div>
+                        <div class="setting-control">
+                            <button id="btn-sync-now" class="update-btn primary" disabled>
+                                <i class="bi bi-arrow-repeat"></i>
+                                <span>Sync Sheets</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="update-section">
+                    <div class="update-status">
+                        <span id="sync-message" class="update-message"></span>
+                    </div>
+                    <div style="margin-top: 20px; color: #888; font-size: 0.9em; line-height: 1.5;">
+                        <p><strong>How it works:</strong></p>
+                        <ol style="margin-left: 20px;">
+                            <li>Install and open <strong>SkyPianoHub Desktop App</strong>.</li>
+                            <li>Log in to your account there.</li>
+                            <li>Come back here and click <strong>Sync Sheets</strong>.</li>
+                        </ol>
+                        <p style="margin-top: 10px;">This app uses your secure login from SkyPianoHub to sync sheets
+                            safely.</p>
                     </div>
                 </div>
             </div>

@@ -143,4 +143,19 @@ export function registerIpcHandlers({ windowController, configService, autoPlayS
 			return { success: false, error: error.message };
 		}
 	});
+	// Sync Handlers
+	ipcMain.handle("sync:status", () => {
+		const { sheetSyncService } = arguments[0];
+		return sheetSyncService.getSyncStatus();
+	});
+
+	ipcMain.handle("sync:start", async () => {
+		const { sheetSyncService } = arguments[0];
+		return await sheetSyncService.syncSheets();
+	});
+
+	ipcMain.handle("sync:upload", async (_, filePath) => {
+		const { sheetSyncService } = arguments[0];
+		return await sheetSyncService.uploadSheet(filePath);
+	});
 }
