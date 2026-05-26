@@ -9,13 +9,14 @@ import { WindowController } from "./controllers/windowController.js";
 import { ConfigService } from "./services/configService.js";
 import { AutoPlayService } from "./services/autoPlayService.js";
 import { UpdateService } from "./services/updateService.js";
+import { ThemeService } from "./services/themeService.js";
 import { registerIpcHandlers } from "./ipc/registerIpcHandlers.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const appDirectory = path.join(__dirname, "..", "..");
 
-const devMode = false;
+const devMode = true;
 
 if (!devMode) {
 	Menu.setApplicationMenu(Menu.buildFromTemplate([]));
@@ -27,9 +28,10 @@ app.setName("Sky Auto Piano");
 const configService = new ConfigService(appDirectory);
 const autoPlayService = new AutoPlayService(configService);
 const updateService = new UpdateService(appDirectory, configService);
+const themeService = new ThemeService(appDirectory);
 const windowController = new WindowController(appDirectory, configService, autoPlayService, updateService);
 
-registerIpcHandlers({ windowController, configService, autoPlayService, updateService });
+registerIpcHandlers({ windowController, configService, autoPlayService, updateService, themeService });
 
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {

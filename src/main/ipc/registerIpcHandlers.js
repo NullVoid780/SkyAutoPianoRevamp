@@ -9,8 +9,9 @@ import { ipcMain, dialog } from "electron/main";
  * @param {import("../services/configService.js").ConfigService} deps.configService
  * @param {import("../services/autoPlayService.js").AutoPlayService} deps.autoPlayService
  * @param {import("../services/updateService.js").UpdateService} deps.updateService
+ * @param {import("../services/themeService.js").ThemeService} deps.themeService
  */
-export function registerIpcHandlers({ windowController, configService, autoPlayService, updateService }) {
+export function registerIpcHandlers({ windowController, configService, autoPlayService, updateService, themeService }) {
 	const appDirectory = windowController.appDirectory;
 
 	ipcMain.on("changeSetting", () => {
@@ -25,11 +26,77 @@ export function registerIpcHandlers({ windowController, configService, autoPlayS
 	});
 
 	ipcMain.on("set-theme", (_, theme) => {
-		configService.setTheme(theme);
+		configService.updateThemeConfig({ activeId: theme });
 
 		if (windowController.editorWindow && !windowController.editorWindow.isDestroyed()) {
 			windowController.editorWindow.webContents.send("theme-changed", theme);
 		}
+	});
+
+	// Theme System Handlers
+	ipcMain.handle("get-themes", () => {
+		return themeService.getAllThemes();
+	});
+
+	ipcMain.handle("get-active-theme", () => {
+		return configService.value.theme;
+	});
+
+	ipcMain.on("set-active-theme", (_, { id, mode }) => {
+		configService.updateThemeConfig({ activeId: id, mode });
+		const themeData = themeService.getTheme(id);
+		
+		const { mainWindow, editorWindow, settingsWindow, themeWindow } = windowController;
+		for (const win of [mainWindow, editorWindow, settingsWindow, themeWindow]) {
+			if (win && !win.isDestroyed()) {
+				win.webContents.send("theme-changed", { themeData, mode });
+			}
+		}
+	});
+
+	ipcMain.handle("create-theme", (_, name, baseId) => {
+		return themeService.createCustomTheme(name, baseId);
+	});
+
+	ipcMain.handle("update-theme", (_, id, partial) => {
+		return themeService.updateTheme(id, partial);
+	});
+
+	ipcMain.handle("rename-theme", (_, id, newName) => {
+		return themeService.renameTheme(id, newName);
+	});
+
+	ipcMain.handle("duplicate-theme", (_, id) => {
+		return themeService.duplicateTheme(id);
+	});
+
+	ipcMain.handle("delete-theme", (_, id) => {
+		return themeService.deleteTheme(id);
+	});
+
+	ipcMain.handle("export-theme", (_, id) => {
+		return themeService.exportTheme(id);
+	});
+
+	ipcMain.handle("import-theme", (_, jsonString) => {
+		return themeService.importTheme(jsonString);
+	});
+
+	ipcMain.handle("show-theme-import-dialog", async () => {
+		const win = windowController.themeWindow ?? windowController.mainWindow;
+		const result = await dialog.showOpenDialog(win, {
+			properties: ['openFile'],
+			filters: [{ name: "SkyAutoPiano Theme", extensions: ["json"] }],
+		});
+		
+		if (!result.canceled && result.filePaths.length > 0) {
+			return fs.readFileSync(result.filePaths[0], 'utf-8');
+		}
+		return null;
+	});
+
+	ipcMain.on("openThemeEditor", () => {
+		windowController.openThemeEditorWindow();
 	});
 
 	ipcMain.on("play", (event, data) => {

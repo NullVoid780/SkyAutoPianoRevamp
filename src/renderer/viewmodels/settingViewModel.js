@@ -35,33 +35,12 @@ document.addEventListener('click', (event) => {
 
 // -------------------------------------
 // THEME MANAGEMENT
-// -------------------------------------
-document.addEventListener("DOMContentLoaded", () => {
-	const body = document.body;
-	const lightModeBgColor = "#f7f9fc";
-	const darkModeBgColor = "#1B1D1E";
+// Theme is now automatically applied by themeApplicator.js
+// which is loaded before this script in setting.html
 
+document.addEventListener("DOMContentLoaded", () => {
 	// Fetch version information
 	document.getElementById("app-version").textContent = `Version: ${packageJson.version}`;
-	
-	/**
-	 * Apply theme to the settings window
-	 * @param {string} theme - 'light' or 'dark' theme name
-	 */
-	const applyTheme = (theme) => {
-		if (theme === "dark") {
-			body.classList.add("dark-mode");
-			body.style.backgroundColor = darkModeBgColor;
-		} else {
-			body.classList.remove("dark-mode");
-			body.style.backgroundColor = lightModeBgColor;
-		}
-	};
-
-	// Apply saved theme or default to light
-	const savedTheme = localStorage.getItem("theme");
-	const initialTheme = savedTheme ? savedTheme : "light";
-	applyTheme(initialTheme);
 });
 
 // -------------------------------------
@@ -89,6 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
 			// Add active class to clicked item
 			item.classList.add('active');
 			
+			// Check if this is an action button rather than a tab
+			const action = item.getAttribute('data-action');
+			if (action === 'open-theme') {
+				ipcRenderer.send('openThemeEditor');
+				// Restore previous active tab visually
+				item.classList.remove('active');
+				const prevTab = document.querySelector(`.nav-item[data-tab="${document.querySelector('.tab-content.active').id}"]`);
+				if (prevTab) prevTab.classList.add('active');
+				return;
+			}
+			
 			// Show corresponding tab
 			const tabId = item.getAttribute('data-tab');
 			showTab(tabId);
@@ -109,7 +99,118 @@ document.addEventListener('DOMContentLoaded', () => {
 		const targetTab = document.getElementById(tabId);
 		if (targetTab) {
 			targetTab.classList.add('active');
+			
+			if (tabId === 'theme' && document.getElementById('themes-grid').children.length === 0) {
+				loadThemes();
+			}
 		}
+	}
+	
+	// Bind Advanced Editor button
+	const advancedEditorBtn = document.getElementById('open-advanced-theme-editor');
+	if (advancedEditorBtn) {
+		advancedEditorBtn.addEventListener('click', () => {
+			ipcRenderer.send('openThemeEditor');
+		});
+	}
+});
+
+// -------------------------------------
+// THEME SELECTOR LOGIC
+// -------------------------------------
+let currentActiveThemeId = null;
+
+async function loadThemes(overrideActiveId = null) {
+	const themesGrid = document.getElementById('themes-grid');
+	if (!themesGrid) return;
+
+	try {
+		const themes = await ipcRenderer.invoke('get-themes');
+		const fetchedActiveConfig = await ipcRenderer.invoke('get-active-theme');
+		const fetchedActiveId = fetchedActiveConfig ? (fetchedActiveConfig.activeId || fetchedActiveConfig) : null;
+		const activeThemeId = overrideActiveId || fetchedActiveId;
+		currentActiveThemeId = activeThemeId;
+		
+		themesGrid.innerHTML = ''; // Clear loading state
+		
+		themes.forEach(theme => {
+			if (!theme || !theme.light || !theme.dark) return; // Skip malformed themes
+
+			const isBuiltIn = !theme.isCustom;
+			const isActive = theme.id === activeThemeId;
+			
+			const card = document.createElement('div');
+			card.className = `theme-preview-card ${isActive ? 'active' : ''}`;
+			card.dataset.themeId = theme.id;
+			card.onclick = () => selectTheme(theme.id);
+			
+			// Extract light/dark backgrounds for the preview
+			const lightBg = theme.light['bg-primary'] || '#ffffff';
+			const lightCard = theme.light['card-bg'] || '#f9fafb';
+			const lightSidebar = theme.light['nav-bg'] || '#ffffff';
+			const lightAccent = theme.light['accent-primary'] || '#3b83f6';
+			
+			const darkBg = theme.dark['bg-primary'] || '#171717';
+			const darkCard = theme.dark['card-bg'] || '#1a1a1a';
+			const darkSidebar = theme.dark['nav-bg'] || '#1a1a1a';
+			const darkAccent = theme.dark['accent-primary'] || '#588e97';
+			
+			card.innerHTML = `
+				<div class="active-check"><i class="bi bi-check2"></i></div>
+				<div class="theme-preview-visual">
+					<!-- Light Mode Side -->
+					<div class="theme-preview-side light-side" style="background-color: ${lightBg}">
+						<div class="mockup-sidebar" style="background-color: ${lightSidebar}"></div>
+						<div class="mockup-content">
+							<div class="mockup-header" style="background-color: ${lightCard}"></div>
+							<div class="mockup-card-mini" style="background-color: ${lightCard}">
+								<div class="mockup-accent-dot" style="background-color: ${lightAccent}"></div>
+							</div>
+						</div>
+					</div>
+					<!-- Dark Mode Side -->
+					<div class="theme-preview-side dark-side" style="background-color: ${darkBg}">
+						<div class="mockup-sidebar" style="background-color: ${darkSidebar}"></div>
+						<div class="mockup-content">
+							<div class="mockup-header" style="background-color: ${darkCard}"></div>
+							<div class="mockup-card-mini" style="background-color: ${darkCard}">
+								<div class="mockup-accent-dot" style="background-color: ${darkAccent}"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="theme-preview-info">
+					<h3>${theme.name}</h3>
+					<span class="theme-badge">${isBuiltIn ? 'Built-in' : 'Custom'}</span>
+				</div>
+			`;
+			
+			themesGrid.appendChild(card);
+		});
+	} catch (error) {
+		console.error("Error loading themes:", error);
+		themesGrid.innerHTML = '<p style="color: var(--accent-error); padding: 20px;">Failed to load themes.</p>';
+	}
+}
+
+function selectTheme(themeId) {
+	const currentMode = (config.theme && config.theme.mode) || 'dark';
+	
+	ipcRenderer.send('set-active-theme', { id: themeId, mode: currentMode });
+	currentActiveThemeId = themeId;
+	
+	const grid = document.getElementById('themes-grid');
+	if (grid) {
+		grid.querySelectorAll('.theme-preview-card').forEach(card => {
+			card.classList.toggle('active', card.dataset.themeId === themeId);
+		});
+	}
+}
+
+ipcRenderer.on('theme-changed', () => {
+	const themesGrid = document.getElementById('themes-grid');
+	if (themesGrid && themesGrid.children.length > 0) {
+		loadThemes();
 	}
 });
 

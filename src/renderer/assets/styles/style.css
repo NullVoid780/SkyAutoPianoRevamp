@@ -789,7 +789,7 @@ body:not(.dark-mode) .search-icon {
 }
 
 .nav-tab.active {
-    background: linear-gradient(135deg, var(--hover-color), #4a90e2);
+    background: var(--accent-primary);
     color: white;
     box-shadow: 0 0px 15px rgba(59, 130, 246, 0.3);
     transform: translateY(-1px);
@@ -822,7 +822,7 @@ body:not(.dark-mode) .nav-tab:hover {
 }
 
 body:not(.dark-mode) .nav-tab.active {
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    background: var(--accent-primary);
     color: white;
     box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
 }

@@ -39,8 +39,8 @@ body {
    ------------------------------------- */
 .sidebar {
     width: 250px !important;
-    background: var(--dark-background);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--nav-bg);
+    border-right: 1px solid var(--card-border);
     display: flex;
     flex-direction: column;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
@@ -52,7 +52,7 @@ body {
 
 .sidebar-header {
     padding: 30px 25px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--card-border);
 }
 
 .app-info {
@@ -65,7 +65,7 @@ body {
 .app-info i {
     font-size: 28px;
     color: var(--hover-color);
-    background: linear-gradient(135deg, var(--hover-color), #4a90e2);
+    background: var(--accent-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -80,10 +80,10 @@ body {
 
 .version-info {
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-muted);
     text-align: center;
     padding: 8px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-tertiary);
     border-radius: 8px;
     backdrop-filter: blur(10px);
 }
@@ -112,13 +112,13 @@ body {
 }
 
 .nav-item:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-tertiary);
     color: var(--hover-color);
     transform: translateX(5px);
 }
 
 .nav-item.active {
-    background: linear-gradient(135deg, var(--hover-color), #4a90e2);
+    background: var(--accent-primary);
     color: white;
     box-shadow: 2px 0px 15px rgba(88, 142, 151, 0.3);
 }
@@ -204,7 +204,7 @@ body {
 .tab-header {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--card-border);
 }
 
 .tab-header h2 {
@@ -222,7 +222,7 @@ body {
 }
 
 .tab-header p {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     font-size: 16px;
     line-height: 1.5;
 }
@@ -237,8 +237,8 @@ body {
 }
 
 .setting-card {
-    background: var(--dark-background);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     border-radius: 16px;
     padding: 20px;
     display: flex;
@@ -251,7 +251,7 @@ body {
 .setting-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: var(--accent-primary);
 }
 
 /* Warning card styling for potentially risky settings */
@@ -371,7 +371,7 @@ body.dark-mode .block-updates-dialog::-webkit-scrollbar-thumb:hover {
 }
 
 .dialog-header {
-    background: linear-gradient(135deg, #ffc107, #ff9800);
+    background: var(--accent-warning);
     padding: 30px;
     text-align: center;
     position: relative;
@@ -490,7 +490,7 @@ body.dark-mode .block-updates-dialog::-webkit-scrollbar-thumb:hover {
 }
 
 .dialog-btn.confirm-btn {
-    background: linear-gradient(135deg, #ffc107, #ff9800);
+    background: var(--accent-warning);
     color: white;
     box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
 }
@@ -639,7 +639,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 .setting-icon {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, var(--hover-color), #4a90e2);
+    background: var(--accent-primary);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -686,7 +686,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 }
 
 .setting-details p {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-muted);
     font-size: 14px;
     line-height: 1.4;
 }
@@ -735,7 +735,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 }
 
 .toggle-switch input:checked + .toggle-slider {
-    background: linear-gradient(135deg, var(--hover-color), #4a90e2);
+    background: var(--accent-primary);
     border-color: var(--hover-color);
 }
 
@@ -754,8 +754,8 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 }
 
 .keyboard-layout {
-    background: var(--dark-background);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     border-radius: 16px;
     padding: 20px;
     display: flex;
@@ -778,7 +778,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
     margin-top: -8px;
     padding: 0 8px;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.75);
+    color: var(--text-secondary);
 }
 
 .keyboard-tip i {
@@ -799,7 +799,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 }
 
 .key:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--bg-tertiary);
     border-color: var(--hover-color);
     transform: scale(1.05);
 }
@@ -822,7 +822,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 }
 
 .key input:focus {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--bg-tertiary);
     border-radius: 6px;
 }
 
@@ -835,7 +835,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
     transform: translate(-50%, -50%) rotate(45deg);
     width: 25px;
     height: 25px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid var(--text-muted);
     border-radius: 4px;
     pointer-events: none;
 }
@@ -848,7 +848,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
     transform: translate(-50%, -50%);
     width: 25px;
     height: 25px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid var(--text-muted);
     border-radius: 50%;
     pointer-events: none;
 }
@@ -864,8 +864,8 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 }
 
 .shortcut-item {
-    background: var(--dark-background);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     border-radius: 12px;
     padding: 16px;
     display: flex;
@@ -876,7 +876,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 }
 
 .shortcut-item:hover {
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: var(--accent-primary);
     transform: translateX(5px);
 }
 
@@ -899,8 +899,8 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 }
 
 .shortcut-item input {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--card-border);
     border-radius: 8px;
     padding: 8px 12px;
     color: var(--font-color);
@@ -914,8 +914,8 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 
 .shortcut-item input:focus {
     outline: none;
-    border-color: #10b981;
-    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent-success);
+    background: var(--bg-secondary);
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 }
 
@@ -930,8 +930,8 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
     margin-top: 30px;
     margin-bottom: 30px;
     padding: 30px;
-    background: var(--dark-background);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     border-radius: 16px;
     backdrop-filter: blur(10px);
 }
@@ -941,7 +941,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
     align-items: center;
     gap: 12px;
     padding: 15px 30px;
-    background: linear-gradient(135deg, var(--hover-color), #4a90e2);
+    background: var(--accent-primary);
     color: white;
     border: none;
     border-radius: 12px;
@@ -1016,7 +1016,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
     justify-content: center;
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    background: var(--accent-success);
     color: white;
     border: none;
     border-radius: 50%;
@@ -1071,8 +1071,8 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 }
 
 .update-prompt-content {
-    background: var(--dark-background);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     border-radius: 20px;
     padding: 40px;
     max-width: 600px;
@@ -1103,7 +1103,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 .update-icon {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, var(--hover-color), #4a90e2);
+    background: var(--accent-primary);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -1251,7 +1251,7 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 }
 
 .update-btn.primary {
-    background: linear-gradient(135deg, var(--hover-color), #4a90e2);
+    background: var(--accent-primary);
     color: white;
     box-shadow: 0 4px 15px rgba(88, 142, 151, 0.3);
 }
@@ -1400,8 +1400,10 @@ body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
 /* -------------------------------------
    DARK MODE ENHANCEMENTS
    ------------------------------------- */
+/* Dark mode styles are handled by CSS variables from themeApplicator.js.
+   No hardcoded color overrides here to ensure live theme switching works. */
 body.dark-mode .sidebar {
-    background: #1a1a1a;
+    background: var(--nav-bg);
 }
 
 body.dark-mode .setting-card,
@@ -1409,59 +1411,58 @@ body.dark-mode .shortcut-item,
 body.dark-mode .keyboard-layout,
 body.dark-mode .update-section,
 body.dark-mode .update-prompt-content {
-    background: #1a1a1a;
-    border-color: rgba(255, 255, 255, 0.05);
+    background: var(--card-bg);
+    border-color: var(--card-border);
 }
 
 body.dark-mode .key {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.05);
+    background: var(--bg-tertiary);
+    border-color: var(--card-border);
 }
 
 body.dark-mode .shortcut-item input {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.05);
+    background: var(--bg-tertiary);
+    border-color: var(--card-border);
 }
 
 /* -------------------------------------
    LIGHT MODE ENHANCEMENTS
    ------------------------------------- */
+/* Light mode styles are handled by CSS variables from themeApplicator.js.
+   Only structural/non-color overrides remain here. */
 body:not(.dark-mode) .sidebar {
-    background: #ffffff;
-    border-right: 1px solid #e5e7eb;
+    background: var(--nav-bg);
+    border-right: 1px solid var(--card-border);
 }
 
 body:not(.dark-mode) .nav-item:hover {
-    background: #f3f4f6;
+    background: var(--bg-tertiary);
 }
 
 body:not(.dark-mode) .nav-item.active {
-    background: linear-gradient(135deg, #6cc2cf, #4a90e2);
+    background: var(--accent-primary);
     color: #ffffff;
 }
 
 body:not(.dark-mode) .tab-header {
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--card-border);
 }
 
-/* Ensure paragraphs read clearly in light mode */
 body:not(.dark-mode) p {
-    color: #111111;
+    color: var(--text-primary);
 }
 
 body:not(.dark-mode) .keyboard-tip {
-    color: #4b5563;
+    color: var(--text-secondary);
 }
 
 body:not(.dark-mode) .setting-card,
 body:not(.dark-mode) .shortcut-item,
 body:not(.dark-mode) .keyboard-layout,
 body:not(.dark-mode) .update-section,
-body:not(.dark-mode) .warning-card,
-
 body:not(.dark-mode) .key {
-    background: #f9fafb;
-    border-color: #e5e7eb;
+    background: var(--card-bg);
+    border-color: var(--card-border);
 }
 
 body:not(.dark-mode) .shortcut-item input {
@@ -1481,9 +1482,9 @@ body:not(.dark-mode) .toggle-switch input:checked + .toggle-slider {
 
 /* Light mode icon accent colors */
 body:not(.dark-mode) .nav-item i { color: #0ea5e9; }
-body:not(.dark-mode) .setting-icon { background: linear-gradient(135deg, #06b6d4, #4a90e2); }
+body:not(.dark-mode) .setting-icon { background: var(--accent-primary); }
 body:not(.dark-mode) .setting-icon i { color: #ffffff !important; }
-body:not(.dark-mode) .check-update-btn { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
+body:not(.dark-mode) .check-update-btn { background: var(--accent-primary); }
 body:not(.dark-mode) .check-update-btn i { color: #ffffff; }
 body:not(.dark-mode) .bi-keyboard { color: #8b5cf6; }
 body:not(.dark-mode) .bi-sliders { color: #f59e0b; }
@@ -1491,17 +1492,173 @@ body:not(.dark-mode) .bi-lightning { color: #f43f5e; }
 body:not(.dark-mode) .bi-arrow-clockwise { color: #0ea5e9; }
 body:not(.dark-mode) .bi-shield-exclamation { color: #ef4444; }
 
-/* improve key shape visibility in light mode */
-body:not(.dark-mode) .key.square:after,
-body:not(.dark-mode) .key.circle:before {
-    border-color: #64748b; /* slate-500 for contrast on white */
+/* Theme tab: Advanced Editor button */
+#open-advanced-theme-editor {
+    padding: 10px 16px;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
+
+#open-advanced-theme-editor:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+/* -------------------------------------
+   THEME SELECTOR STYLES
+   ------------------------------------- */
+.themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    padding-bottom: 30px;
+}
+
+.theme-preview-card {
+    background: var(--card-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.theme-preview-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border-color: var(--accent-primary);
+}
+
+.theme-preview-card.active {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px var(--accent-primary);
+}
+
+.theme-preview-visual {
+    height: 100px;
+    display: flex;
+    position: relative;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.theme-preview-side {
+    flex: 1;
+    display: flex;
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-preview-side.light-side {
+    border-right: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Mockup Elements inside the preview */
+.mockup-sidebar {
+    width: 25%;
+    height: 100%;
+    border-radius: 4px;
+    margin-right: 5px;
+    opacity: 0.9;
+}
+
+.mockup-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.mockup-header {
+    height: 20%;
+    border-radius: 4px;
+    opacity: 0.8;
+}
+
+.mockup-card-mini {
+    flex: 1;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 5px;
+    opacity: 0.9;
+}
+
+.mockup-accent-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.theme-preview-info {
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.theme-preview-info h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.theme-badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.active-check {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--accent-primary);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.theme-preview-card.active .active-check {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Key shape visibility is now handled by var(--text-muted) universally */
 
 /* Dark mode icon accents */
 body.dark-mode .nav-item i { color: #60a5fa; }
-body.dark-mode .setting-icon { background: linear-gradient(135deg, #38bdf8, #4a90e2); }
+body.dark-mode .setting-icon { background: var(--accent-primary); }
 body.dark-mode .setting-icon i { color: #ffffff !important; }
-body.dark-mode .check-update-btn { background: linear-gradient(135deg, #22c55e, #16a34a); }
+body.dark-mode .check-update-btn { background: var(--accent-primary); }
 body.dark-mode .check-update-btn i { color: #ffffff; }
 body.dark-mode .bi-keyboard { color: #c084fc; }
 body.dark-mode .bi-sliders { color: #fbbf24; }

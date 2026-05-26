@@ -96,46 +96,27 @@ fs.readFile(listSheetPath, { encoding: "utf8" }, (err, data) => {
 // -------------------------------------
 // Initialize UI on document load
 document.addEventListener("DOMContentLoaded", () => {
-  // Theme management
+  // Theme management is now fully handled by themeApplicator.js
+  // which is loaded before this script in index.html
+  
+  // The sun/moon buttons now trigger IPC to change the theme mode
   const themeToggleButtonLight = document.getElementById("btn-lightmode");
   const themeToggleButtonDark = document.getElementById("btn-darkmode");
-  const body = document.body;
 
-  const lightModeBgColor = "#ffffff";
-  const darkModeBgColor = "#1B1D1E";
-
-  // Apply theme to UI
-  const applyTheme = (theme) => {
-    if (theme === "dark") {
-      body.classList.add("dark-mode");
-      body.style.backgroundColor = darkModeBgColor;
-    } else {
-      body.classList.remove("dark-mode");
-      body.style.backgroundColor = lightModeBgColor;
-    }
-    ipcRenderer.send("set-theme", theme);
+  const toggleThemeMode = () => {
+    // Current active ID is in config, so we get it from there
+    ipcRenderer.invoke("get-active-theme").then(config => {
+      const newMode = config.mode === 'dark' ? 'light' : 'dark';
+      ipcRenderer.send("set-active-theme", { id: config.activeId, mode: newMode });
+    });
   };
 
-  // Toggle between light and dark themes
-  const toggleTheme = () => {
-    const isDarkMode = body.classList.contains("dark-mode");
-    const newTheme = isDarkMode ? "light" : "dark";
-    localStorage.setItem("theme", newTheme);
-    applyTheme(newTheme);
-  };
-
-  // Set up theme toggle buttons
   if (themeToggleButtonLight) {
-    themeToggleButtonLight.addEventListener("click", toggleTheme);
+    themeToggleButtonLight.addEventListener("click", toggleThemeMode);
   }
   if (themeToggleButtonDark) {
-    themeToggleButtonDark.addEventListener("click", toggleTheme);
+    themeToggleButtonDark.addEventListener("click", toggleThemeMode);
   }
-
-  // Apply saved theme or default
-  const savedTheme = localStorage.getItem("theme");
-  const initialTheme = savedTheme ? savedTheme : "light";
-  applyTheme(initialTheme);
 
   // -------------------------------------
   // NAVIGATION TAB FUNCTIONALITY

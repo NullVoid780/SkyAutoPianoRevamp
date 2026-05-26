@@ -40,6 +40,10 @@
                     <i class="bi bi-lightning"></i>
                     <span>Shortcuts</span>
                 </a>
+                <a href="#theme" class="nav-item" id="nav-theme" data-tab="theme">
+                    <i class="bi bi-palette-fill"></i>
+                    <span>Themes</span>
+                </a>
                 <a href="#update" class="nav-item" data-tab="update">
                     <i class="bi bi-arrow-clockwise"></i>
                     <span>Updates</span>
@@ -234,6 +238,23 @@
                 </div>
             </div>
 
+            <!-- Theme Tab -->
+            <div id="theme" class="tab-content">
+                <div class="tab-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2><i class="bi bi-palette-fill"></i> Themes</h2>
+                        <p>Select a theme for your application</p>
+                    </div>
+                    <button id="open-advanced-theme-editor">
+                        <i class="bi bi-sliders"></i> Advanced Editor
+                    </button>
+                </div>
+                
+                <div id="themes-grid" class="themes-grid">
+                    <!-- Themes will be dynamically injected here by settingViewModel.js -->
+                </div>
+            </div>
+
             <!-- Update Tab -->
             <div id="update" class="tab-content">
                 <div class="tab-header">
@@ -312,6 +333,7 @@
     </div>
 
     <script type="text/javascript" src="../assets/scripts/notie.js"></script>
+    <script type="text/javascript" src="../assets/scripts/themeApplicator.js"></script>
     <script type="text/javascript" src="../viewmodels/settingViewModel.js"></script>
 
     <script>

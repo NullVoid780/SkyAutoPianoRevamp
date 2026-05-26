@@ -36,6 +36,10 @@ export class ConfigService {
 				blockUpdate: false,
 			},
 			appTheme: "dark",
+			theme: {
+				activeId: "classic",
+				mode: "dark"
+			},
 		};
 
 		ensureDirectory(this.configDirectory);
@@ -110,6 +114,14 @@ export class ConfigService {
 	updatePanel(partial) {
 		this.config.panel = {
 			...this.config.panel,
+			...partial,
+		};
+		this.save();
+	}
+
+	updateThemeConfig(partial) {
+		this.config.theme = {
+			...this.config.theme,
 			...partial,
 		};
 		this.save();

@@ -5,34 +5,63 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
 
 :root {
-  --background-color: #ffffff;
-  --dark-background: #0f172a;
-  --font-color: #2c3e50;
-  --hover-color: #3b83f6;
+  /* New Comprehensive Theme System Variables */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f4f6;
+  --bg-tertiary: #e5e7eb;
   
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+  --text-accent: #3b82f6;
+  
+  --accent-primary: #3b82f6;
+  --accent-error: #ef4444;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  
+  --card-bg: #ffffff;
+  --card-border: #e5e7eb;
+  
+  --player-bg: #ffffff;
+  --progress-color: #3b82f6;
+  --control-active: #3b82f6;
+  
+  --search-bg: #f3f4f6;
+  --search-border: #e5e7eb;
+  
+  --btn-primary-bg: #3b82f6;
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: #e5e7eb;
+  --btn-secondary-text: #1f2937;
+  
+  --nav-bg: #ffffff;
+  --nav-active: #3b82f6;
+  --nav-inactive: #6b7280;
+
+  /* Legacy Backward-Compatibility Aliases */
+  --background-color: var(--bg-primary);
+  --dark-background: var(--bg-secondary);
+  --font-color: var(--text-primary);
+  --hover-color: var(--accent-primary);
+  
+  --border-color: var(--card-border);
+  --success-color: var(--accent-success);
+  --error-color: var(--accent-error);
+
+  /* Constants */
   --grid-color: rgba(44, 62, 80, 0.1);
   --dot-size: 3px;
   --dot-color: rgba(44, 62, 80, 0.2);
   --active-color: rgba(44, 62, 80, 0.25);
   --edit-bg: rgba(44, 62, 80, 0.1);
-  --border-color: #2c3e50;
-  --success-color: #27ae60;
-  --error-color: #e74c3c;
 }
 
 body.dark-mode {
-  --background-color: #171717;
-  --dark-background: #05012c;
-  --font-color: #a8b2d1;
-  --hover-color: #588e97;
-  
   --grid-color: rgba(110, 110, 110, 0.2);
   --dot-color: rgba(255, 255, 255, 0.3);
   --active-color: rgba(110, 110, 110, 0.4);
   --edit-bg: rgba(0, 0, 0, 0.2);
-  --border-color: #a8b2d1;
-  --success-color: #4CAF50;
-  --error-color: #f44336;
 }
 
 /* -------------------------------------
@@ -43,6 +72,12 @@ body.dark-mode {
 }
 
 /* Scrollbar styling */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 body::-webkit-scrollbar {
   width: 8px;
   background-color: transparent;

@@ -23,6 +23,7 @@ export class WindowController {
 		this.mainWindow = null;
 		this.settingsWindow = null;
 		this.editorWindow = null;
+		this.themeWindow = null;
 	}
 
 	createMainWindow() {
@@ -202,5 +203,37 @@ export class WindowController {
 		});
 
 		return editorWin;
+	}
+
+	openThemeEditorWindow() {
+		if (this.themeWindow && !this.themeWindow.isDestroyed()) {
+			this.themeWindow.focus();
+			return this.themeWindow;
+		}
+
+		const { appTheme } = this.configService.value;
+		const backgroundColor = appTheme === "dark" ? "#171717" : "#0a1930";
+
+		const themeWin = new BrowserWindow({
+			width: 1100,
+			height: 700,
+			minWidth: 900,
+			minHeight: 600,
+			backgroundColor,
+			parent: this.mainWindow ?? undefined,
+			webPreferences: {
+				nodeIntegration: true,
+				contextIsolation: false,
+			},
+		});
+
+		themeWin.loadFile(path.join(this.rendererRoot, "views", "theme.html"));
+		this.themeWindow = themeWin;
+		
+		themeWin.once("closed", () => {
+			this.themeWindow = null;
+		});
+
+		return themeWin;
 	}
 }

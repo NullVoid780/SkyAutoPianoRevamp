@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Theme Editor</title>
+    <link rel="stylesheet" href="../assets/styles/global.css">
+    <link rel="stylesheet" type="text/css" href="../assets/styles/notie.min.css">
+    <link rel="stylesheet" href="../assets/styles/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <div class="theme-editor-container">
+        <!-- Panel 1: Theme List -->
+        <div class="panel theme-list-panel">
+            <div class="panel-header">
+                <h2><i class="bi bi-palette-fill"></i> Themes</h2>
+            </div>
+            
+            <div class="theme-list-content">
+                <div class="theme-section">
+                    <h3>Built-in Themes</h3>
+                    <div id="builtin-themes-list" class="theme-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="theme-section">
+                    <div class="section-header">
+                        <h3>Custom Themes</h3>
+                        <button id="btn-create-theme" class="icon-btn" title="Create New Theme">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                    <div id="custom-themes-list" class="theme-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <button id="btn-import" class="action-btn">
+                    <i class="bi bi-download"></i> Import
+                </button>
+                <button id="btn-export" class="action-btn">
+                    <i class="bi bi-upload"></i> Export
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel 2: Color Editor -->
+        <div class="panel color-editor-panel">
+            <div class="panel-header editor-header">
+                <div class="editor-title">
+                    <h2 id="current-theme-name">Select a theme</h2>
+                    <span id="theme-status-badge" class="badge">Built-in</span>
+                </div>
+                <div class="editor-actions" id="custom-theme-actions" style="display: none;">
+                    <button id="btn-rename" class="icon-btn" title="Rename Theme"><i class="bi bi-pencil"></i></button>
+                    <button id="btn-duplicate" class="icon-btn" title="Duplicate Theme"><i class="bi bi-copy"></i></button>
+                    <button id="btn-delete" class="icon-btn danger" title="Delete Theme"><i class="bi bi-trash"></i></button>
+                </div>
+            </div>
+
+            <div class="editor-content" id="color-editor-content">
+                <!-- Overlay when no custom theme is selected or built-in is selected -->
+                <div id="editor-overlay" class="editor-overlay">
+                    <div class="overlay-content">
+                        <i class="bi bi-lock-fill"></i>
+                        <h3>Built-in Theme</h3>
+                        <p>Duplicate this theme to customize its colors.</p>
+                        <button id="btn-duplicate-overlay" class="primary-btn">Create Custom Copy</button>
+                    </div>
+                </div>
+
+                <!-- Accordion sections -->
+                <div class="accordion">
+                    <!-- App Background -->
+                    <div class="accordion-item">
+                        <button class="accordion-header"><i class="bi bi-window"></i> App Background <i class="bi bi-chevron-down arrow"></i></button>
+                        <div class="accordion-content">
+                            <div class="color-row"><label>Primary</label><div class="color-picker-wrap"><input type="color" data-var="bg-primary"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Secondary</label><div class="color-picker-wrap"><input type="color" data-var="bg-secondary"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Tertiary</label><div class="color-picker-wrap"><input type="color" data-var="bg-tertiary"><input type="text" class="hex-input" maxlength="7"></div></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Text System -->
+                    <div class="accordion-item">
+                        <button class="accordion-header"><i class="bi bi-type"></i> Text System <i class="bi bi-chevron-down arrow"></i></button>
+                        <div class="accordion-content">
+                            <div class="color-row"><label>Primary</label><div class="color-picker-wrap"><input type="color" data-var="text-primary"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Secondary</label><div class="color-picker-wrap"><input type="color" data-var="text-secondary"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Muted</label><div class="color-picker-wrap"><input type="color" data-var="text-muted"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Accent</label><div class="color-picker-wrap"><input type="color" data-var="text-accent"><input type="text" class="hex-input" maxlength="7"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Accent Colors -->
+                    <div class="accordion-item">
+                        <button class="accordion-header"><i class="bi bi-magic"></i> Accent Colors <i class="bi bi-chevron-down arrow"></i></button>
+                        <div class="accordion-content">
+                            <div class="color-row"><label>Primary Accent</label><div class="color-picker-wrap"><input type="color" data-var="accent-primary"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Success</label><div class="color-picker-wrap"><input type="color" data-var="accent-success"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Warning</label><div class="color-picker-wrap"><input type="color" data-var="accent-warning"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Error</label><div class="color-picker-wrap"><input type="color" data-var="accent-error"><input type="text" class="hex-input" maxlength="7"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Song Cards -->
+                    <div class="accordion-item">
+                        <button class="accordion-header"><i class="bi bi-card-text"></i> Song Cards <i class="bi bi-chevron-down arrow"></i></button>
+                        <div class="accordion-content">
+                            <div class="color-row"><label>Background</label><div class="color-picker-wrap"><input type="color" data-var="card-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Border</label><div class="color-picker-wrap"><input type="color" data-var="card-border"><input type="text" class="hex-input" maxlength="7"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Playback UI -->
+                    <div class="accordion-item">
+                        <button class="accordion-header"><i class="bi bi-play-circle"></i> Playback UI <i class="bi bi-chevron-down arrow"></i></button>
+                        <div class="accordion-content">
+                            <div class="color-row"><label>Background</label><div class="color-picker-wrap"><input type="color" data-var="player-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Progress Bar</label><div class="color-picker-wrap"><input type="color" data-var="progress-color"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Active Control</label><div class="color-picker-wrap"><input type="color" data-var="control-active"><input type="text" class="hex-input" maxlength="7"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="accordion-item">
+                        <button class="accordion-header"><i class="bi bi-square"></i> Buttons <i class="bi bi-chevron-down arrow"></i></button>
+                        <div class="accordion-content">
+                            <div class="color-row"><label>Primary BG</label><div class="color-picker-wrap"><input type="color" data-var="btn-primary-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Primary Text</label><div class="color-picker-wrap"><input type="color" data-var="btn-primary-text"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Secondary BG</label><div class="color-picker-wrap"><input type="color" data-var="btn-secondary-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Secondary Text</label><div class="color-picker-wrap"><input type="color" data-var="btn-secondary-text"><input type="text" class="hex-input" maxlength="7"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="accordion-item">
+                        <button class="accordion-header"><i class="bi bi-search"></i> Search Bar <i class="bi bi-chevron-down arrow"></i></button>
+                        <div class="accordion-content">
+                            <div class="color-row"><label>Background</label><div class="color-picker-wrap"><input type="color" data-var="search-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Border</label><div class="color-picker-wrap"><input type="color" data-var="search-border"><input type="text" class="hex-input" maxlength="7"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="accordion-item">
+                        <button class="accordion-header"><i class="bi bi-list"></i> Navigation <i class="bi bi-chevron-down arrow"></i></button>
+                        <div class="accordion-content">
+                            <div class="color-row"><label>Background</label><div class="color-picker-wrap"><input type="color" data-var="nav-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Active Item</label><div class="color-picker-wrap"><input type="color" data-var="nav-active"><input type="text" class="hex-input" maxlength="7"></div></div>
+                            <div class="color-row"><label>Inactive Item</label><div class="color-picker-wrap"><input type="color" data-var="nav-inactive"><input type="text" class="hex-input" maxlength="7"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-footer editor-footer">
+                <div class="history-controls">
+                    <button id="btn-undo" class="icon-btn" disabled title="Undo"><i class="bi bi-arrow-counterclockwise"></i></button>
+                    <button id="btn-redo" class="icon-btn" disabled title="Redo"><i class="bi bi-arrow-clockwise"></i></button>
+                </div>
+                <button id="btn-save" class="primary-btn" disabled>
+                    <i class="bi bi-check2"></i> Save Changes
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel 3: Live Preview -->
+        <div class="panel preview-panel">
+            <div class="panel-header preview-header">
+                <h2><i class="bi bi-eye-fill"></i> Live Preview</h2>
+                <div class="mode-toggle">
+                    <button id="preview-light" class="mode-btn active" title="Light Mode"><i class="bi bi-sun-fill"></i></button>
+                    <button id="preview-dark" class="mode-btn" title="Dark Mode"><i class="bi bi-moon-fill"></i></button>
+                </div>
+            </div>
+
+            <div class="preview-content">
+                <!-- Mockup App Window -->
+                <div class="mockup-window" id="preview-frame">
+                    
+                    <!-- Nav Tabs Mockup -->
+                    <div class="mockup-nav">
+                        <div class="mockup-tab active">All Songs</div>
+                        <div class="mockup-tab">Favorite</div>
+                        <div class="mockup-tab">Recent</div>
+                    </div>
+                    
+                    <!-- Search Bar Mockup -->
+                    <div class="mockup-search">
+                        <i class="bi bi-search"></i>
+                        <span>Search the music sheet...</span>
+                    </div>
+
+                    <!-- Song Cards Mockup -->
+                    <div class="mockup-cards">
+                        <div class="mockup-card">
+                            <h3>River Flows in You</h3>
+                            <div class="mockup-card-info">
+                                <span><i class="bi bi-person-fill"></i> Yiruma</span>
+                                <span><i class="bi bi-music-note-beamed"></i> 120 BPM</span>
+                            </div>
+                            <div class="mockup-card-actions">
+                                <i class="bi bi-heart-fill mockup-accent-text"></i>
+                                <i class="bi bi-play-circle-fill mockup-accent"></i>
+                            </div>
+                        </div>
+                        <div class="mockup-card">
+                            <h3>Canon in D</h3>
+                            <div class="mockup-card-info">
+                                <span><i class="bi bi-person-fill"></i> Pachelbel</span>
+                                <span><i class="bi bi-music-note-beamed"></i> 80 BPM</span>
+                            </div>
+                            <div class="mockup-card-actions">
+                                <i class="bi bi-heart mockup-muted"></i>
+                                <i class="bi bi-play-circle-fill mockup-accent"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Player Mockup -->
+                    <div class="mockup-footer">
+                        <div class="mockup-player-info">River Flows in You</div>
+                        <div class="mockup-progress-container">
+                            <div class="mockup-progress-bar"></div>
+                        </div>
+                        <div class="mockup-controls">
+                            <i class="bi bi-skip-start-fill"></i>
+                            <i class="bi bi-play-fill mockup-active-control" style="font-size: 24px;"></i>
+                            <i class="bi bi-skip-end-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="preview-info">
+                <i class="bi bi-info-circle"></i> Preview updates in real-time as you edit colors.
+            </div>
+        </div>
+    </div>
+
+    <!-- Rename Dialog -->
+    <div id="rename-dialog" class="dialog-overlay">
+        <div class="dialog-box">
+            <h3>Rename Theme</h3>
+            <input type="text" id="rename-input" class="dialog-input" placeholder="Theme Name">
+            <div class="dialog-buttons">
+                <button id="btn-rename-cancel" class="dialog-btn secondary">Cancel</button>
+                <button id="btn-rename-confirm" class="dialog-btn primary">Rename</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../assets/scripts/notie.js"></script>
+    <script type="text/javascript" src="../assets/scripts/themeApplicator.js"></script>
+    <script type="text/javascript" src="../viewmodels/themeViewModel.js"></script>
+</body>
+</html>
