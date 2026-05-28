@@ -6,6 +6,9 @@ const dataDirectory = path.join(appRoot, 'data');
 const configPath = path.join(appRoot, 'config', 'config.json');
 
 document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const sheetIndex = params.get('sheetIndex');
+
     let currentActiveGrid = null;
     const keyboardKeys = document.querySelectorAll('#keyboard td');
     let gridBoxes;
