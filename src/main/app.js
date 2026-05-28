@@ -10,6 +10,7 @@ import { ConfigService } from "./services/configService.js";
 import { AutoPlayService } from "./services/autoPlayService.js";
 import { UpdateService } from "./services/updateService.js";
 import { ThemeService } from "./services/themeService.js";
+import { EditorThemeService } from "./services/editorThemeService.js";
 import { registerIpcHandlers } from "./ipc/registerIpcHandlers.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,9 +30,10 @@ const configService = new ConfigService(appDirectory);
 const autoPlayService = new AutoPlayService(configService);
 const updateService = new UpdateService(appDirectory, configService);
 const themeService = new ThemeService(appDirectory);
+const editorThemeService = new EditorThemeService(appDirectory);
 const windowController = new WindowController(appDirectory, configService, autoPlayService, updateService);
 
-registerIpcHandlers({ windowController, configService, autoPlayService, updateService, themeService });
+registerIpcHandlers({ windowController, configService, autoPlayService, updateService, themeService, editorThemeService });
 
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {

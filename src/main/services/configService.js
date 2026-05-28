@@ -40,6 +40,10 @@ export class ConfigService {
 				activeId: "classic",
 				mode: "dark"
 			},
+			editorTheme: {
+				activeId: "classic",
+				mode: "dark"
+			},
 		};
 
 		ensureDirectory(this.configDirectory);
@@ -122,6 +126,14 @@ export class ConfigService {
 	updateThemeConfig(partial) {
 		this.config.theme = {
 			...this.config.theme,
+			...partial,
+		};
+		this.save();
+	}
+
+	updateEditorThemeConfig(partial) {
+		this.config.editorTheme = {
+			...this.config.editorTheme,
 			...partial,
 		};
 		this.save();

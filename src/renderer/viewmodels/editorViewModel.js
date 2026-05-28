@@ -15,34 +15,46 @@ document.addEventListener('DOMContentLoaded', () => {
     let keyMapData = null;
     let hasUnsavedChanges = false;
 
-    // Get the sheet index from the URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const sheetIndex = urlParams.get('sheetIndex');    // Load and apply theme
-    function loadTheme() {
+    // Load and apply editor theme
+    async function loadEditorTheme() {
         try {
-            const config = JSON.parse(fs.readFileSync(configPath, { encoding: 'utf8' }));
-            const theme = config.appTheme || 'dark';
-            if (theme === 'dark') {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
-            }
+            const activeThemeConfig = await ipcRenderer.invoke("get-active-editor-theme");
+            if (!activeThemeConfig) return;
+
+            const themes = await ipcRenderer.invoke("get-editor-themes");
+            const activeThemeData = themes.find(t => t.id === activeThemeConfig.activeId) || themes[0];
+
+            applyTheme(activeThemeData, activeThemeConfig.mode);
         } catch (error) {
-            console.error('Error loading theme:', error);
-            document.body.classList.add('dark-mode');
+            console.error("Failed to load editor theme:", error);
         }
     }
 
-    ipcRenderer.on('theme-changed', (event, theme) => {
-        if (theme === 'dark') {
+    function applyTheme(themeData, mode) {
+        if (!themeData) return;
+        const colors = themeData[mode];
+        if (!colors) return;
+
+        const root = document.documentElement;
+        for (const [key, value] of Object.entries(colors)) {
+            root.style.setProperty(`--${key}`, value);
+        }
+
+        if (mode === "dark") {
             document.body.classList.add('dark-mode');
         } else {
             document.body.classList.remove('dark-mode');
         }
+    }
+
+    ipcRenderer.on('editor-theme-changed', (event, data) => {
+        if (data && typeof data === 'object' && data.themeData) {
+            applyTheme(data.themeData, data.mode);
+        }
     });
 
     // Initial theme load
-    loadTheme();
+    loadEditorTheme();
 
     // Load sheet data
     let sheetData = null;
@@ -54,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             );
             sheetData = listSheet[sheetIndex];
-            
+
             // Load keymap data
             if (sheetData.keyMap) {
                 keyMapData = JSON.parse(
@@ -63,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                 );
             }
-            
+
             updateFieldValues(sheetData);
             // Generate grid boxes
             generateGridBoxes(keyMapData);
@@ -78,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateFieldValues(data) {
         if (!data) return;
-        
+
         const fields = {
             name: data.name || 'Untitled',
             author: data.author || 'Unknown',
@@ -99,32 +111,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const gridContainer = document.querySelector('.grid-boxes');
         const timestamps = Object.keys(keyMapData).sort((a, b) => parseInt(a) - parseInt(b));
-        
+
         gridContainer.innerHTML = '';
-        
+
         // Create a box for every timestamp in the keymap
         timestamps.forEach((timeMs, index) => {
             const gridColumn = document.createElement('div');
             gridColumn.className = 'grid-column';
-            
+
             const gridBox = document.createElement('div');
             gridBox.className = 'grid-box';
             gridBox.setAttribute('data-time', timeMs);
             gridBox.style.animationDelay = `${index * 0.05}s`;
-            
+
             // Create grid dots
             for (let j = 0; j < 15; j++) {
                 const dot = document.createElement('div');
                 dot.setAttribute('data-key', '');
                 gridBox.appendChild(dot);
             }
-            
+
             const timestamp = document.createElement('div');
             timestamp.className = 'timestamp';
             const seconds = Math.floor(parseInt(timeMs) / 1000);
             const ms = parseInt(timeMs) % 1000;
             timestamp.textContent = `${seconds}.${ms.toString().padStart(3, '0')}s`;
-            
+
             gridColumn.appendChild(gridBox);
             gridColumn.appendChild(timestamp);
             gridContainer.appendChild(gridColumn);
@@ -136,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const timestamps = Object.keys(keyMapData).sort((a, b) => parseInt(a) - parseInt(b));
         const gridBoxes = document.querySelectorAll('.grid-box');
-        
+
         gridBoxes.forEach((box) => {
             const dots = box.querySelectorAll('div');
             dots.forEach(dot => dot.setAttribute('data-key', ''));
@@ -164,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateGridBox(box, keys) {
         const dots = box.querySelectorAll('div');
         dots.forEach(dot => dot.setAttribute('data-key', ''));
-        
+
         keys.forEach(key => {
             const keyIndex = getKeyIndex(key);
             if (keyIndex >= 0 && keyIndex < dots.length) {
@@ -186,12 +198,12 @@ document.addEventListener('DOMContentLoaded', () => {
             ipcRenderer.send('keymap-updated', {
                 index: parseInt(sheetIndex)
             });
-            
+
             // Show success message using notie
             notie.alert({ type: 'success', text: 'Sheet saved successfully!', time: 2 });
 
             hasUnsavedChanges = false;
-            
+
             // Hide edit buttons
             const buttons = document.querySelector('#keyboard .edit-buttons');
             buttons.classList.remove('visible');
@@ -209,20 +221,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!keyMapData[timeMs]) {
                     keyMapData[timeMs] = [];
                 }
-                
+
                 // Remove active state from previously selected grid
                 if (currentActiveGrid) {
                     currentActiveGrid.classList.remove('active');
                     // Clear keyboard highlights
                     clearKeyboardHighlights();
                 }
-                
+
                 currentActiveGrid = box;
                 currentActiveGrid.classList.add('active');
-                
+
                 // Highlight keyboard keys for this timestamp
                 highlightKeyboardKeys(timeMs);
-                
+
                 // Show edit buttons
                 const buttons = document.querySelector('#keyboard .edit-buttons');
                 buttons.classList.add('visible');
@@ -238,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function highlightKeyboardKeys(timeMs) {
         clearKeyboardHighlights();
-        
+
         if (keyMapData[timeMs] && keyMapData[timeMs].length > 0) {
             keyMapData[timeMs].forEach(key => {
                 const keyElement = findKeyElement(key);
@@ -250,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function findKeyElement(keyValue) {
-        return Array.from(keyboardKeys).find(key => 
+        return Array.from(keyboardKeys).find(key =>
             key.querySelector('input').value.toLowerCase() === keyValue.toLowerCase()
         );
     }
@@ -259,14 +271,14 @@ document.addEventListener('DOMContentLoaded', () => {
     keyboardKeys.forEach(key => {
         key.addEventListener('click', () => {
             if (!currentActiveGrid || !keyMapData) return;
-            
+
             const keyValue = key.querySelector('input').value.toLowerCase();
             const timeMs = currentActiveGrid.getAttribute('data-time');
-            
+
             if (!keyMapData[timeMs]) {
                 keyMapData[timeMs] = [];
             }
-            
+
             const keyIndex = keyMapData[timeMs].indexOf(keyValue);
             if (keyIndex === -1) {
                 keyMapData[timeMs].push(keyValue);
@@ -275,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 keyMapData[timeMs].splice(keyIndex, 1);
                 key.classList.remove('active');
             }
-            
+
             updateGridBox(currentActiveGrid, keyMapData[timeMs]);
             hasUnsavedChanges = true;
         });
@@ -367,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function cancelEditing() {
         if (!currentEditingField) return;
-        
+
         const valueSpan = currentEditingField.querySelector('.field-value');
         valueSpan.textContent = originalValue;
         endEditing();
@@ -380,11 +392,11 @@ document.addEventListener('DOMContentLoaded', () => {
         valueSpan.contentEditable = false;
         valueSpan.classList.remove('editing');
         currentEditingField.classList.remove('editing');
-        
+
         // Hide edit buttons
         const buttons = document.querySelector('#keyboard .edit-buttons');
         buttons.classList.remove('visible');
-        
+
         currentEditingField = null;
         originalValue = '';
     }
@@ -439,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const key = e.key.toLowerCase();
-        
+
         // Handle Escape key for grid selection
         if (key === 'escape') {
             const buttons = document.querySelector('#keyboard .edit-buttons');
@@ -471,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Find the corresponding keyboard key element
             const keyElement = findKeyElement(key);
-            
+
             // Toggle the key in the current timestamp
             const keyIndex = keyMapData[timeMs].indexOf(key);
             if (keyIndex === -1) {

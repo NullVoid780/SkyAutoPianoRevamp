@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Theme Editor</title>
@@ -8,14 +9,21 @@
     <link rel="stylesheet" href="../assets/styles/theme.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
+
 <body>
     <div class="theme-editor-container">
         <!-- Panel 1: Theme List -->
         <div class="panel theme-list-panel">
-            <div class="panel-header">
-                <h2><i class="bi bi-palette-fill"></i> Themes</h2>
+            <div class="panel-header" style="flex-direction: column; align-items: stretch; gap: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2><i class="bi bi-palette-fill"></i> Themes</h2>
+                </div>
+                <div class="theme-context-switcher">
+                    <button id="btn-context-app" class="context-btn active" data-context="app">App Theme</button>
+                    <button id="btn-context-editor" class="context-btn" data-context="editor">Editor Theme</button>
+                </div>
             </div>
-            
+
             <div class="theme-list-content">
                 <div class="theme-section">
                     <h3>Built-in Themes</h3>
@@ -56,13 +64,14 @@
                 </div>
                 <div class="editor-actions" id="custom-theme-actions" style="display: none;">
                     <button id="btn-rename" class="icon-btn" title="Rename Theme"><i class="bi bi-pencil"></i></button>
-                    <button id="btn-duplicate" class="icon-btn" title="Duplicate Theme"><i class="bi bi-copy"></i></button>
-                    <button id="btn-delete" class="icon-btn danger" title="Delete Theme"><i class="bi bi-trash"></i></button>
+                    <button id="btn-duplicate" class="icon-btn" title="Duplicate Theme"><i
+                            class="bi bi-copy"></i></button>
+                    <button id="btn-delete" class="icon-btn danger" title="Delete Theme"><i
+                            class="bi bi-trash"></i></button>
                 </div>
             </div>
 
             <div class="editor-content" id="color-editor-content">
-                <!-- Overlay when no custom theme is selected or built-in is selected -->
                 <div id="editor-overlay" class="editor-overlay">
                     <div class="overlay-content">
                         <i class="bi bi-lock-fill"></i>
@@ -72,86 +81,229 @@
                     </div>
                 </div>
 
-                <!-- Accordion sections -->
-                <div class="accordion">
-                    <!-- App Background -->
-                    <div class="accordion-item">
-                        <button class="accordion-header"><i class="bi bi-window"></i> App Background <i class="bi bi-chevron-down arrow"></i></button>
-                        <div class="accordion-content">
-                            <div class="color-row"><label>Primary</label><div class="color-picker-wrap"><input type="color" data-var="bg-primary"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Secondary</label><div class="color-picker-wrap"><input type="color" data-var="bg-secondary"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Tertiary</label><div class="color-picker-wrap"><input type="color" data-var="bg-tertiary"><input type="text" class="hex-input" maxlength="7"></div></div>
+                <!-- App Theme Editor Interface -->
+                <div id="app-theme-interface" class="theme-interface">
+                    <div class="editor-tabs-container">
+                        <div class="editor-tabs-header">
+                            <button class="editor-tab-btn active" data-tab="tab-basic"><i class="bi bi-palette"></i>
+                                Basic</button>
+                            <button class="editor-tab-btn" data-tab="tab-homepage"><i class="bi bi-house-door"></i>
+                                Home</button>
+                            <button class="editor-tab-btn" data-tab="tab-playback"><i class="bi bi-play-circle"></i>
+                                Playback</button>
+                            <button class="editor-tab-btn" data-tab="tab-advanced"><i class="bi bi-gear"></i>
+                                Advanced</button>
                         </div>
-                    </div>
-                    
-                    <!-- Text System -->
-                    <div class="accordion-item">
-                        <button class="accordion-header"><i class="bi bi-type"></i> Text System <i class="bi bi-chevron-down arrow"></i></button>
-                        <div class="accordion-content">
-                            <div class="color-row"><label>Primary</label><div class="color-picker-wrap"><input type="color" data-var="text-primary"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Secondary</label><div class="color-picker-wrap"><input type="color" data-var="text-secondary"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Muted</label><div class="color-picker-wrap"><input type="color" data-var="text-muted"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Accent</label><div class="color-picker-wrap"><input type="color" data-var="text-accent"><input type="text" class="hex-input" maxlength="7"></div></div>
-                        </div>
-                    </div>
 
-                    <!-- Accent Colors -->
-                    <div class="accordion-item">
-                        <button class="accordion-header"><i class="bi bi-magic"></i> Accent Colors <i class="bi bi-chevron-down arrow"></i></button>
-                        <div class="accordion-content">
-                            <div class="color-row"><label>Primary Accent</label><div class="color-picker-wrap"><input type="color" data-var="accent-primary"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Success</label><div class="color-picker-wrap"><input type="color" data-var="accent-success"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Warning</label><div class="color-picker-wrap"><input type="color" data-var="accent-warning"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Error</label><div class="color-picker-wrap"><input type="color" data-var="accent-error"><input type="text" class="hex-input" maxlength="7"></div></div>
+                        <div class="editor-tab-content active" id="tab-basic">
+                            <div class="color-section">
+                                <h4>App Background</h4>
+                                <div class="color-row"><label>Primary</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="bg-primary"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Secondary</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="bg-secondary"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                            <div class="color-section">
+                                <h4>Main Text</h4>
+                                <div class="color-row"><label>Primary</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="text-primary"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Secondary</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="text-secondary"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                            <div class="color-section">
+                                <h4>Global Accent</h4>
+                                <div class="color-row"><label>Primary Accent</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="accent-primary"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editor-tab-content" id="tab-homepage">
+                            <div class="color-section">
+                                <h4>Navigation</h4>
+                                <div class="color-row"><label>Background</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="nav-bg"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Active Item</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="nav-active"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Inactive Item</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="nav-inactive"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                            <div class="color-section">
+                                <h4>Song Cards</h4>
+                                <div class="color-row"><label>Background</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="card-bg"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Border</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="card-border"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                            <div class="color-section">
+                                <h4>Search Bar</h4>
+                                <div class="color-row"><label>Background</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="search-bg"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Border</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="search-border"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editor-tab-content" id="tab-playback">
+                            <div class="color-section">
+                                <h4>Footer Player</h4>
+                                <div class="color-row"><label>Background</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="player-bg"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Progress Bar</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="progress-color"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Active Control</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="control-active"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editor-tab-content" id="tab-advanced">
+                            <div class="color-section">
+                                <h4>Additional Backgrounds</h4>
+                                <div class="color-row"><label>Tertiary</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="bg-tertiary"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                            <div class="color-section">
+                                <h4>Additional Text</h4>
+                                <div class="color-row"><label>Muted</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="text-muted"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Accent</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="text-accent"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                            <div class="color-section">
+                                <h4>State Accents</h4>
+                                <div class="color-row"><label>Success</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="accent-success"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Warning</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="accent-warning"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Error</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="accent-error"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                            <div class="color-section">
+                                <h4>Buttons</h4>
+                                <div class="color-row"><label>Primary BG</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="btn-primary-bg"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Primary Text</label>
+                                    <div class="color-picker-wrap"><input type="color"
+                                            data-var="btn-primary-text"><input type="text" class="hex-input"
+                                            maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Secondary BG</label>
+                                    <div class="color-picker-wrap"><input type="color"
+                                            data-var="btn-secondary-bg"><input type="text" class="hex-input"
+                                            maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Secondary Text</label>
+                                    <div class="color-picker-wrap"><input type="color"
+                                            data-var="btn-secondary-text"><input type="text" class="hex-input"
+                                            maxlength="7"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Song Cards -->
-                    <div class="accordion-item">
-                        <button class="accordion-header"><i class="bi bi-card-text"></i> Song Cards <i class="bi bi-chevron-down arrow"></i></button>
-                        <div class="accordion-content">
-                            <div class="color-row"><label>Background</label><div class="color-picker-wrap"><input type="color" data-var="card-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Border</label><div class="color-picker-wrap"><input type="color" data-var="card-border"><input type="text" class="hex-input" maxlength="7"></div></div>
+                <!-- Editor Theme Interface -->
+                <div id="editor-theme-interface" class="theme-interface" style="display: none;">
+                    <div class="editor-tabs-container">
+                        <div class="editor-tabs-header">
+                            <button class="editor-tab-btn active" data-tab="tab-editor-basic"><i
+                                    class="bi bi-music-note-list"></i> Sheet Editor</button>
                         </div>
-                    </div>
 
-                    <!-- Playback UI -->
-                    <div class="accordion-item">
-                        <button class="accordion-header"><i class="bi bi-play-circle"></i> Playback UI <i class="bi bi-chevron-down arrow"></i></button>
-                        <div class="accordion-content">
-                            <div class="color-row"><label>Background</label><div class="color-picker-wrap"><input type="color" data-var="player-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Progress Bar</label><div class="color-picker-wrap"><input type="color" data-var="progress-color"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Active Control</label><div class="color-picker-wrap"><input type="color" data-var="control-active"><input type="text" class="hex-input" maxlength="7"></div></div>
-                        </div>
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="accordion-item">
-                        <button class="accordion-header"><i class="bi bi-square"></i> Buttons <i class="bi bi-chevron-down arrow"></i></button>
-                        <div class="accordion-content">
-                            <div class="color-row"><label>Primary BG</label><div class="color-picker-wrap"><input type="color" data-var="btn-primary-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Primary Text</label><div class="color-picker-wrap"><input type="color" data-var="btn-primary-text"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Secondary BG</label><div class="color-picker-wrap"><input type="color" data-var="btn-secondary-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Secondary Text</label><div class="color-picker-wrap"><input type="color" data-var="btn-secondary-text"><input type="text" class="hex-input" maxlength="7"></div></div>
-                        </div>
-                    </div>
-
-                    <!-- Search Bar -->
-                    <div class="accordion-item">
-                        <button class="accordion-header"><i class="bi bi-search"></i> Search Bar <i class="bi bi-chevron-down arrow"></i></button>
-                        <div class="accordion-content">
-                            <div class="color-row"><label>Background</label><div class="color-picker-wrap"><input type="color" data-var="search-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Border</label><div class="color-picker-wrap"><input type="color" data-var="search-border"><input type="text" class="hex-input" maxlength="7"></div></div>
-                        </div>
-                    </div>
-
-                    <!-- Navigation -->
-                    <div class="accordion-item">
-                        <button class="accordion-header"><i class="bi bi-list"></i> Navigation <i class="bi bi-chevron-down arrow"></i></button>
-                        <div class="accordion-content">
-                            <div class="color-row"><label>Background</label><div class="color-picker-wrap"><input type="color" data-var="nav-bg"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Active Item</label><div class="color-picker-wrap"><input type="color" data-var="nav-active"><input type="text" class="hex-input" maxlength="7"></div></div>
-                            <div class="color-row"><label>Inactive Item</label><div class="color-picker-wrap"><input type="color" data-var="nav-inactive"><input type="text" class="hex-input" maxlength="7"></div></div>
+                        <div class="editor-tab-content active" id="tab-editor-basic">
+                            <div class="color-section">
+                                <h4>Global Background</h4>
+                                <div class="color-row"><label>Background</label>
+                                    <div class="color-picker-wrap"><input type="color"
+                                            data-var="background-color"><input type="text" class="hex-input"
+                                            maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Main Text</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="font-color"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                            <div class="color-section">
+                                <h4>Music Grid</h4>
+                                <div class="color-row"><label>Grid Box</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="grid-color"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Grid Hover</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="hover-color"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Grid Active</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="active-color"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Note Dots</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="dot-color"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
+                            <div class="color-section">
+                                <h4>UI Elements</h4>
+                                <div class="color-row"><label>Borders & Inputs</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="border-color"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Editable Text BG</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="edit-bg"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Save Button</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="success-color"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                                <div class="color-row"><label>Cancel Button</label>
+                                    <div class="color-picker-wrap"><input type="color" data-var="error-color"><input
+                                            type="text" class="hex-input" maxlength="7"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -159,8 +311,10 @@
 
             <div class="panel-footer editor-footer">
                 <div class="history-controls">
-                    <button id="btn-undo" class="icon-btn" disabled title="Undo"><i class="bi bi-arrow-counterclockwise"></i></button>
-                    <button id="btn-redo" class="icon-btn" disabled title="Redo"><i class="bi bi-arrow-clockwise"></i></button>
+                    <button id="btn-undo" class="icon-btn" disabled title="Undo"><i
+                            class="bi bi-arrow-counterclockwise"></i></button>
+                    <button id="btn-redo" class="icon-btn" disabled title="Redo"><i
+                            class="bi bi-arrow-clockwise"></i></button>
                 </div>
                 <button id="btn-save" class="primary-btn" disabled>
                     <i class="bi bi-check2"></i> Save Changes
@@ -173,22 +327,24 @@
             <div class="panel-header preview-header">
                 <h2><i class="bi bi-eye-fill"></i> Live Preview</h2>
                 <div class="mode-toggle">
-                    <button id="preview-light" class="mode-btn active" title="Light Mode"><i class="bi bi-sun-fill"></i></button>
-                    <button id="preview-dark" class="mode-btn" title="Dark Mode"><i class="bi bi-moon-fill"></i></button>
+                    <button id="preview-light" class="mode-btn active" title="Light Mode"><i
+                            class="bi bi-sun-fill"></i></button>
+                    <button id="preview-dark" class="mode-btn" title="Dark Mode"><i
+                            class="bi bi-moon-fill"></i></button>
                 </div>
             </div>
 
             <div class="preview-content">
-                <!-- Mockup App Window -->
-                <div class="mockup-window" id="preview-frame">
-                    
+                <!-- App Theme Mockup -->
+                <div class="mockup-window" id="app-preview-mockup">
+
                     <!-- Nav Tabs Mockup -->
                     <div class="mockup-nav">
                         <div class="mockup-tab active">All Songs</div>
                         <div class="mockup-tab">Favorite</div>
                         <div class="mockup-tab">Recent</div>
                     </div>
-                    
+
                     <!-- Search Bar Mockup -->
                     <div class="mockup-search">
                         <i class="bi bi-search"></i>
@@ -234,6 +390,215 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Editor Theme Mockup -->
+                <div class="mockup-window em-window" id="editor-preview-mockup" style="display: none;">
+                    <!-- Music Grid -->
+                    <div class="em-grid-section">
+                        <div class="em-grid-row">
+                            <div class="em-box em-box-active">
+                                <div class="em-dot-grid">
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                </div>
+                                <div class="em-timestamp">0.000s</div>
+                            </div>
+                            <div class="em-box">
+                                <div class="em-dot-grid">
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                </div>
+                                <div class="em-timestamp">0.328s</div>
+                            </div>
+                            <div class="em-box">
+                                <div class="em-dot-grid">
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                </div>
+                                <div class="em-timestamp">0.656s</div>
+                            </div>
+                            <div class="em-box">
+                                <div class="em-dot-grid">
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                </div>
+                                <div class="em-timestamp">1.312s</div>
+                            </div>
+                        </div>
+                        <div class="em-grid-row">
+                            <div class="em-box">
+                                <div class="em-dot-grid">
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                </div>
+                            </div>
+                            <div class="em-box">
+                                <div class="em-dot-grid">
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                </div>
+                            </div>
+                            <div class="em-box">
+                                <div class="em-dot-grid">
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                </div>
+                            </div>
+                            <div class="em-box">
+                                <div class="em-dot-grid">
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot em-dot-filled"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                    <div class="em-dot"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Bar: info + keyboard + export -->
+                    <div class="em-bottom">
+                        <div class="em-info-panel">
+                            <div class="em-info-row em-editable">Cry For Me</div>
+                            <div class="em-info-row"><span class="em-label">Author:</span> <span
+                                    class="em-editable">Michita</span></div>
+                            <div class="em-info-row"><span class="em-label">Transcribed by:</span> <span
+                                    class="em-editable">Fluxion751</span></div>
+                            <div class="em-info-row"><span class="em-label">BPM:</span> <span
+                                    class="em-editable">364</span></div>
+                        </div>
+
+                        <!-- Keyboard -->
+                        <div class="em-keyboard">
+                            <div class="em-key-row">
+                                <div class="em-key em-key-sq em-key-ci">Y</div>
+                                <div class="em-key em-key-sq">U</div>
+                                <div class="em-key em-key-ci">I</div>
+                                <div class="em-key em-key-sq">O</div>
+                                <div class="em-key em-key-ci">P</div>
+                            </div>
+                            <div class="em-key-row">
+                                <div class="em-key em-key-ci">H</div>
+                                <div class="em-key em-key-sq">J</div>
+                                <div class="em-key em-key-sq em-key-ci">K</div>
+                                <div class="em-key em-key-sq">L</div>
+                                <div class="em-key em-key-ci">;</div>
+                            </div>
+                            <div class="em-key-row">
+                                <div class="em-key em-key-ci">N</div>
+                                <div class="em-key em-key-sq">M</div>
+                                <div class="em-key em-key-ci">,</div>
+                                <div class="em-key em-key-sq">.</div>
+                                <div class="em-key em-key-sq em-key-ci">/</div>
+                            </div>
+                        </div>
+
+                        <div class="em-export-area">
+                            <div class="em-export-btn">Export</div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="preview-info">
                 <i class="bi bi-info-circle"></i> Preview updates in real-time as you edit colors.
@@ -241,7 +606,6 @@
         </div>
     </div>
 
-    <!-- Rename Dialog -->
     <div id="rename-dialog" class="dialog-overlay">
         <div class="dialog-box">
             <h3>Rename Theme</h3>
@@ -257,4 +621,5 @@
     <script type="text/javascript" src="../assets/scripts/themeApplicator.js"></script>
     <script type="text/javascript" src="../viewmodels/themeViewModel.js"></script>
 </body>
+
 </html>

@@ -256,43 +256,28 @@ body {
 
 /* Warning card styling for potentially risky settings */
 .warning-card {
-    border-color: rgba(255, 193, 7, 0.3) !important;
-    background: linear-gradient(135deg, rgba(255, 193, 7, 0.05), rgba(255, 193, 7, 0.02)) !important;
+    border-color: var(--accent-warning) !important;
+    background: var(--bg-tertiary) !important;
 }
 
 .warning-card:hover {
-    border-color: rgba(255, 193, 7, 0.5) !important;
-    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.1) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+    filter: brightness(1.1);
 }
 
 .warning-icon {
-    background: linear-gradient(135deg, #ffc107, #ff9800) !important;
-    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3) !important;
+    background: var(--accent-warning) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
 .warning-text {
     display: block;
     font-size: 12px;
-    color: #ffc107;
+    color: var(--accent-warning);
     margin-top: 8px;
     font-weight: 500;
     opacity: 0.9;
     cursor: default;
-}
-
-/* Light mode warning card styling */
-body:not(.dark-mode) .warning-card {
-    border-color: rgba(255, 193, 7, 0.4) !important;
-    background: linear-gradient(135deg, rgba(255, 193, 7, 0.08), rgba(255, 193, 7, 0.03)) !important;
-}
-
-body:not(.dark-mode) .warning-card:hover {
-    border-color: rgba(255, 193, 7, 0.6) !important;
-    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.15) !important;
-}
-
-body:not(.dark-mode) .warning-text {
-    color: #d97706;
 }
 
 /* -------------------------------------
@@ -415,8 +400,8 @@ body.dark-mode .block-updates-dialog::-webkit-scrollbar-thumb:hover {
 }
 
 .warning-details {
-    background: rgba(255, 193, 7, 0.1);
-    border: 1px solid rgba(255, 193, 7, 0.2);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--accent-warning);
     border-radius: 12px;
     padding: 20px;
     margin: 20px 0;
@@ -436,7 +421,7 @@ body.dark-mode .block-updates-dialog::-webkit-scrollbar-thumb:hover {
 
 .warning-item i {
     font-size: 18px;
-    color: #ffc107;
+    color: var(--accent-warning);
     width: 24px;
     text-align: center;
     flex-shrink: 0;
@@ -479,113 +464,29 @@ body.dark-mode .block-updates-dialog::-webkit-scrollbar-thumb:hover {
 }
 
 .dialog-btn.cancel-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--font-color);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
 }
 
 .dialog-btn.cancel-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--card-border);
     transform: translateY(-2px);
 }
 
 .dialog-btn.confirm-btn {
     background: var(--accent-warning);
     color: white;
-    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .dialog-btn.confirm-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .dialog-btn i {
     font-size: 16px;
-}
-
-/* Light mode dialog styling */
-body:not(.dark-mode) .block-updates-dialog {
-    background: #ffffff;
-    border-color: #e5e7eb;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-}
-
-body:not(.dark-mode) .block-updates-dialog .dialog-content p {
-    color: #111827;
-}
-
-body:not(.dark-mode) .block-updates-dialog .warning-details {
-    background: rgba(255, 193, 7, 0.08);
-    border-color: rgba(255, 193, 7, 0.3);
-}
-
-body:not(.dark-mode) .block-updates-dialog .warning-item span {
-    color: #374151;
-}
-
-body:not(.dark-mode) .block-updates-dialog .note {
-    color: #6b7280 !important;
-}
-
-body:not(.dark-mode) .block-updates-dialog .dialog-btn.cancel-btn {
-    background: #f3f4f6;
-    color: #374151;
-    border-color: #d1d5db;
-}
-
-body:not(.dark-mode) .block-updates-dialog .dialog-btn.cancel-btn:hover {
-    background: #e5e7eb;
-}
-
-body:not(.dark-mode) .block-updates-dialog .dialog-btn.confirm-btn {
-    color: #000000;
-}
-
-body:not(.dark-mode) .block-updates-dialog .dialog-btn.confirm-btn span {
-    color: #ffffff;
-}
-
-/* Dark mode dialog box */
-body.dark-mode .block-updates-dialog {
-    background: var(--background-color);
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode .block-updates-dialog .dialog-content p {
-    color: #ffffff;
-}
-
-body.dark-mode .block-updates-dialog .warning-details {
-    background: rgba(255, 193, 7, 0.1);
-    border-color: rgba(255, 193, 7, 0.2);
-}
-
-body.dark-mode .block-updates-dialog .warning-item span {
-    color: #ffffff;
-}
-
-body.dark-mode .block-updates-dialog .note {
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-
-body.dark-mode .block-updates-dialog .dialog-btn.cancel-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-body.dark-mode .block-updates-dialog .dialog-btn.cancel-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn {
-    color: #ffffff;
-}
-
-body.dark-mode .block-updates-dialog .dialog-btn.confirm-btn span {
-    color: #ffffff;
 }
 
 

@@ -10,8 +10,9 @@ import { ipcMain, dialog } from "electron/main";
  * @param {import("../services/autoPlayService.js").AutoPlayService} deps.autoPlayService
  * @param {import("../services/updateService.js").UpdateService} deps.updateService
  * @param {import("../services/themeService.js").ThemeService} deps.themeService
+ * @param {import("../services/editorThemeService.js").EditorThemeService} deps.editorThemeService
  */
-export function registerIpcHandlers({ windowController, configService, autoPlayService, updateService, themeService }) {
+export function registerIpcHandlers({ windowController, configService, autoPlayService, updateService, themeService, editorThemeService }) {
 	const appDirectory = windowController.appDirectory;
 
 	ipcMain.on("changeSetting", () => {
@@ -87,6 +88,68 @@ export function registerIpcHandlers({ windowController, configService, autoPlayS
 		const result = await dialog.showOpenDialog(win, {
 			properties: ['openFile'],
 			filters: [{ name: "SkyAutoPiano Theme", extensions: ["json"] }],
+		});
+		
+		if (!result.canceled && result.filePaths.length > 0) {
+			return fs.readFileSync(result.filePaths[0], 'utf-8');
+		}
+		return null;
+	});
+
+	// Editor Theme System Handlers
+	ipcMain.handle("get-editor-themes", () => {
+		return editorThemeService.getAllThemes();
+	});
+
+	ipcMain.handle("get-active-editor-theme", () => {
+		return configService.value.editorTheme;
+	});
+
+	ipcMain.on("set-active-editor-theme", (_, { id, mode }) => {
+		configService.updateEditorThemeConfig({ activeId: id, mode });
+		const themeData = editorThemeService.getTheme(id);
+		
+		const { editorWindow, themeWindow } = windowController;
+		for (const win of [editorWindow, themeWindow]) {
+			if (win && !win.isDestroyed()) {
+				win.webContents.send("editor-theme-changed", { themeData, mode });
+			}
+		}
+	});
+
+	ipcMain.handle("create-editor-theme", (_, name, baseId) => {
+		return editorThemeService.createCustomTheme(name, baseId);
+	});
+
+	ipcMain.handle("update-editor-theme", (_, id, partial) => {
+		return editorThemeService.updateTheme(id, partial);
+	});
+
+	ipcMain.handle("rename-editor-theme", (_, id, newName) => {
+		return editorThemeService.renameTheme(id, newName);
+	});
+
+	ipcMain.handle("duplicate-editor-theme", (_, id) => {
+		return editorThemeService.duplicateTheme(id);
+	});
+
+	ipcMain.handle("delete-editor-theme", (_, id) => {
+		return editorThemeService.deleteTheme(id);
+	});
+
+	ipcMain.handle("export-editor-theme", (_, id) => {
+		return editorThemeService.exportTheme(id);
+	});
+
+	ipcMain.handle("import-editor-theme", (_, jsonString) => {
+		return editorThemeService.importTheme(jsonString);
+	});
+
+	ipcMain.handle("show-editor-theme-import-dialog", async () => {
+		const win = windowController.themeWindow ?? windowController.mainWindow;
+		const result = await dialog.showOpenDialog(win, {
+			properties: ['openFile'],
+			filters: [{ name: "SkyAutoPiano Editor Theme", extensions: ["json"] }],
 		});
 		
 		if (!result.canceled && result.filePaths.length > 0) {
